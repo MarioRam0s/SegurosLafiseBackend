@@ -19,9 +19,9 @@ public partial class InsurancePolicyCoverage
 
     public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdateAt { get; set; }
+    public DateTime? UpdateAt { get; set; }
 
-    public DateTime DeleteAt { get; set; }
+    public DateTime? DeleteAt { get; set; }
 
     public virtual Coverage IdCoverageNavigation { get; set; } = null!;
 

@@ -21,9 +21,9 @@ public partial class Vehicle
 
     public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdateAt { get; set; }
+    public DateTime? UpdateAt { get; set; }
 
-    public DateTime DeleteAt { get; set; }
+    public DateTime? DeleteAt { get; set; }
 
     public virtual ICollection<InsurancePolicy> InsurancePolicies { get; set; } = new List<InsurancePolicy>();
 }

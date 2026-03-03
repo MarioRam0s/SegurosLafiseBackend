@@ -15,9 +15,9 @@ public partial class Coverage
 
     public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdateAt { get; set; }
+    public DateTime? UpdateAt { get; set; }
 
-    public DateTime DeleteAt { get; set; }
+    public DateTime? DeleteAt { get; set; }
 
     public virtual CoverageCategory IdCoverageCategoryNavigation { get; set; } = null!;
 

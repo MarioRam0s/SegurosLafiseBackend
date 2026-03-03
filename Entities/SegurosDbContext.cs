@@ -35,14 +35,16 @@ public partial class SegurosDbContext : DbContext
     {
         modelBuilder.Entity<Client>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Client__3213E83F7940B7B0");
+            entity.HasKey(e => e.Id).HasName("PK__Client__3213E83F7F66DE5E");
 
             entity.ToTable("Client");
 
-            entity.HasIndex(e => e.Identification, "UQ__Client__AAA7C1F5DB11CD92").IsUnique();
+            entity.HasIndex(e => e.Identification, "UQ__Client__AAA7C1F53D9720A2").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("active");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(sysdatetime())")
                 .HasColumnType("datetime")
@@ -66,12 +68,14 @@ public partial class SegurosDbContext : DbContext
 
         modelBuilder.Entity<Coverage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Coverage__3213E83FE9B6813C");
+            entity.HasKey(e => e.Id).HasName("PK__Coverage__3213E83FE0D1FC8E");
 
             entity.ToTable("Coverage");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("active");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(sysdatetime())")
                 .HasColumnType("datetime")
@@ -95,12 +99,14 @@ public partial class SegurosDbContext : DbContext
 
         modelBuilder.Entity<CoverageCategory>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Coverage__3213E83FC7E8BE5B");
+            entity.HasKey(e => e.Id).HasName("PK__Coverage__3213E83F725CDE24");
 
             entity.ToTable("CoverageCategory");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("active");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(sysdatetime())")
                 .HasColumnType("datetime")
@@ -119,14 +125,16 @@ public partial class SegurosDbContext : DbContext
 
         modelBuilder.Entity<InsurancePolicy>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Insuranc__3213E83F83544429");
+            entity.HasKey(e => e.Id).HasName("PK__Insuranc__3213E83FEDDF1DDA");
 
             entity.ToTable("InsurancePolicy");
 
-            entity.HasIndex(e => e.InsurancePolicy1, "UQ__Insuranc__486D2128A794E2D4").IsUnique();
+            entity.HasIndex(e => e.InsurancePolicy1, "UQ__Insuranc__486D212854D567DC").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("active");
             entity.Property(e => e.CoverageAmount)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("coverageAmount");
@@ -140,7 +148,7 @@ public partial class SegurosDbContext : DbContext
             entity.Property(e => e.IdClient).HasColumnName("idClient");
             entity.Property(e => e.IdVehicle).HasColumnName("idVehicle");
             entity.Property(e => e.InsurancePolicy1)
-                .HasMaxLength(20)
+                .HasMaxLength(50)
                 .HasColumnName("insurancePolicy");
             entity.Property(e => e.IssueDate).HasColumnName("issueDate");
             entity.Property(e => e.TotalPremium)
@@ -163,14 +171,16 @@ public partial class SegurosDbContext : DbContext
 
         modelBuilder.Entity<InsurancePolicyCoverage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Insuranc__3213E83F8E54FAC8");
+            entity.HasKey(e => e.Id).HasName("PK__Insuranc__3213E83FEA48D627");
 
             entity.ToTable("InsurancePolicyCoverage");
 
             entity.HasIndex(e => new { e.IdPolicy, e.IdCoverage }, "UQ_InsurancePolicy_Coverage").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("active");
             entity.Property(e => e.AppliedCoverageAmount)
                 .HasColumnType("decimal(18, 0)")
                 .HasColumnName("appliedCoverageAmount");
@@ -203,14 +213,16 @@ public partial class SegurosDbContext : DbContext
 
         modelBuilder.Entity<Vehicle>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Vehicle__3213E83FC447CACF");
+            entity.HasKey(e => e.Id).HasName("PK__Vehicle__3213E83FE4506AE7");
 
             entity.ToTable("Vehicle");
 
-            entity.HasIndex(e => e.LicensePlate, "UQ__Vehicle__5BC9DE415D1B0009").IsUnique();
+            entity.HasIndex(e => e.LicensePlate, "UQ__Vehicle__5BC9DE41DC4D1AF4").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Active).HasColumnName("active");
+            entity.Property(e => e.Active)
+                .HasDefaultValue(true)
+                .HasColumnName("active");
             entity.Property(e => e.Brand)
                 .HasMaxLength(50)
                 .HasColumnName("brand");

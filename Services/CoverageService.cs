@@ -34,8 +34,6 @@ namespace SegurosLafiseBackend.Services
                 IdCoverageCategory = dto.IdCoverageCategory,
                 Rate = dto.Rate,
                 Active = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdateAt = DateTime.UtcNow
             };
 
             var created = await _repository.CreateAsync(coverage);
@@ -44,7 +42,7 @@ namespace SegurosLafiseBackend.Services
             {
                 Id = created.Id,
                 IdCoverageCategory = created.IdCoverageCategory,
-                Rate = created.Rate
+                Rate = created.Rate,
             };
         }
 
@@ -56,6 +54,21 @@ namespace SegurosLafiseBackend.Services
                 throw new Exception("Coverage not found");
 
             await _repository.SoftDeleteAsync(coverage);
+        }
+
+        public async Task<CoverageDto?> GetByIdAsync(int id)
+        {
+            var coverage = await _repository.GetByIdAsync(id);
+
+            if (coverage == null || !coverage.Active)
+                return null;
+
+            return new CoverageDto
+            {
+                Id = coverage.Id,
+                IdCoverageCategory = coverage.IdCoverageCategory,
+                Rate = coverage.Rate
+            };
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SegurosLafiseBackend.Dtos;
+﻿using SegurosLafiseBackend.Dtos;
 using SegurosLafiseBackend.Entities;
 using SegurosLafiseBackend.Repositories;
 
@@ -51,7 +50,7 @@ namespace SegurosLafiseBackend.Services
             if (vehicle is null)
                 throw new Exception("Vehicle not found");
 
-            var vehicleAge = DateTime.UtcNow.Year - vehicle.ManufacturingYear;
+            var vehicleAge =  DateTime.UtcNow.Year - vehicle.ManufacturingYear;
 
             if (vehicleAge > 20)
                 throw new Exception("The vehicle is older than 20 years and cannot be insured.");
@@ -81,62 +80,66 @@ namespace SegurosLafiseBackend.Services
 
         public async Task<InsurancePolicyDto> EmitPolicy(EmitPolicyDto dto)
         {
-            // 🔹 1. Validar cliente
+            // Validar cliente
             var client = await _clientRepository.GetByIdAsync(dto.IdClient);
             if (client == null)
                 throw new Exception("Client not found");
 
-            // 🔹 2. Validar vehículo
+            //Validar vehículo
             var vehicle = await _vehicleRepository.GetByIdAsync(dto.IdVehicle);
             if (vehicle == null)
                 throw new Exception("Vehicle not found");
 
-            // 🔹 3. Validar que no exista póliza activa para este cliente y vehículo
+            //Validar que no exista póliza activa para este cliente y vehículo
             var hasActivePolicy = await _policyRepository.ExistsActivePolicyByClientAndVehicleAsync(client.Id, vehicle.Id);
             if (hasActivePolicy)
                 throw new Exception("Client already has an active policy for this vehicle");
 
-            // 🔹 4. Obtener coberturas seleccionadas
+            //Obtener coberturas seleccionadas
             var coverages = await _coverageRepository.GetByIdsAsync(dto.CoverageIds);
             if (coverages.Count != dto.CoverageIds.Count)
                 throw new Exception("One or more coverages not found");
 
-            // 🔹 5. Calcular TotalPremium
-            decimal totalPremium = coverages.Sum(c => vehicle.CommercialValue * (c.Rate / 100m));
-
-            // 🔹 6. Crear póliza
+            //Crear póliza
             var policy = new InsurancePolicy
             {
-                InsurancePolicy1 = "POL-" + DateTime.UtcNow.Ticks, // número único
+                InsurancePolicy1 = "POL-" + DateTime.UtcNow.Ticks,
                 IdClient = client.Id,
                 IdVehicle = vehicle.Id,
                 IssueDate = DateOnly.FromDateTime(DateTime.UtcNow),
                 CoverageAmount = vehicle.CommercialValue,
-                TotalPremium = totalPremium,
+                TotalPremium = 0, // se calculará después
                 Active = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdateAt = DateTime.UtcNow
             };
 
-            // 🔹 7. Asociar coberturas a la póliza
-            foreach (var coverage in coverages)
-            {
-                policy.InsurancePolicyCoverages.Add(new InsurancePolicyCoverage
-                {
-                    IdCoverage = coverage.Id,
-                    IdPolicyNavigation = policy,
-                    AppliedRate = coverage.Rate,
-                    AppliedCoverageAmount = vehicle.CommercialValue * (coverage.Rate / 100m),
-                    Active = true,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdateAt = DateTime.UtcNow
-                });
-            }
-
-            // 🔹 8. Guardar póliza
+            //Guardar la póliza para obtener el Id
             var createdPolicy = await _policyRepository.CreateAsync(policy);
 
-            // 🔹 9. Devolver DTO
+            //Agregar coberturas usando IdPolicy explícitamente
+            decimal totalPremium = 0;
+            foreach (var coverage in coverages)
+            {
+                var appliedAmount = vehicle.CommercialValue * (coverage.Rate / 100m);
+                totalPremium += appliedAmount;
+
+                var policyCoverage = new InsurancePolicyCoverage
+                {
+                    IdPolicy = createdPolicy.Id, 
+                    IdCoverage = coverage.Id,
+                    AppliedRate = coverage.Rate,
+                    AppliedCoverageAmount = appliedAmount,
+                };
+
+                _context.InsurancePolicyCoverages.Add(policyCoverage);
+            }
+
+            //Actualizar prima total
+            createdPolicy.TotalPremium = totalPremium;
+
+            //Guardar cambios
+            await _context.SaveChangesAsync();
+
+            //Devolver DTO
             return new InsurancePolicyDto
             {
                 Id = createdPolicy.Id,
@@ -146,7 +149,6 @@ namespace SegurosLafiseBackend.Services
                 IssueDate = createdPolicy.IssueDate,
                 CoverageAmount = createdPolicy.CoverageAmount,
                 TotalPremium = createdPolicy.TotalPremium,
-                Active = createdPolicy.Active
             };
         }
 

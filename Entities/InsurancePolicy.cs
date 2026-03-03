@@ -23,9 +23,9 @@ public partial class InsurancePolicy
 
     public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdateAt { get; set; }
+    public DateTime? UpdateAt { get; set; }
 
-    public DateTime DeleteAt { get; set; }
+    public DateTime? DeleteAt { get; set; }
 
     public virtual Client IdClientNavigation { get; set; } = null!;
 

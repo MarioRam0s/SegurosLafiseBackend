@@ -29,9 +29,7 @@ namespace SegurosLafiseBackend.Services
                 NameClient = dto.NameClient,
                 Identification = dto.Identification,
                 Email = dto.Email,
-                Active = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdateAt = DateTime.UtcNow
+                Active=true,
             };
 
             await _repository.AddAsync(client);

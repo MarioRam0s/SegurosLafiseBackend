@@ -80,8 +80,6 @@ namespace SegurosLafiseBackend.Services
                 ManufacturingYear = dto.ManufacturingYear,
                 CommercialValue = dto.CommercialValue,
                 Active = true,
-                CreatedAt = DateTime.UtcNow,
-                UpdateAt = DateTime.UtcNow
             };
 
             await _repository.AddAsync(vehicle);
@@ -93,7 +91,7 @@ namespace SegurosLafiseBackend.Services
                 Brand = vehicle.Brand,
                 Model = vehicle.Model,
                 ManufacturingYear = vehicle.ManufacturingYear,
-                CommercialValue = vehicle.CommercialValue
+                CommercialValue = vehicle.CommercialValue,
             };
         }
 

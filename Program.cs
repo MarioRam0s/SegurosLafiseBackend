@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SegurosLafiseBackend.Entities;
+using SegurosLafiseBackend.Middleware;
 using SegurosLafiseBackend.Repositories;
 using SegurosLafiseBackend.Services;
 
@@ -26,6 +27,9 @@ builder.Services.AddScoped<IInsurancePolicyRepository, InsurancePolicyRepository
 builder.Services.AddScoped<IInsurancePolicyService, InsurancePolicyService>();
 
 var app = builder.Build();
+
+// Middleware de manejo de errores global
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -13,9 +13,9 @@ public partial class CoverageCategory
 
     public DateTime CreatedAt { get; set; }
 
-    public DateTime UpdateAt { get; set; }
+    public DateTime? UpdateAt { get; set; }
 
-    public DateTime DeleteAt { get; set; }
+    public DateTime? DeleteAt { get; set; }
 
     public virtual ICollection<Coverage> Coverages { get; set; } = new List<Coverage>();
 }
