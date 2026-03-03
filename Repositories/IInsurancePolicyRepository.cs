@@ -8,5 +8,7 @@ namespace SegurosLafiseBackend.Repositories
         Task<List<InsurancePolicy>> GetAllAsync();
         Task<InsurancePolicy?> GetByIdAsync(int id);
         Task SoftDeleteAsync(InsurancePolicy policy);
+
+        Task<bool> ExistsActivePolicyByClientAndVehicleAsync(int clientId, int vehicleId);
     }
 }

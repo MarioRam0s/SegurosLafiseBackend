@@ -38,5 +38,12 @@ namespace SegurosLafiseBackend.Repositories
             coverage.DeleteAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<Coverage>> GetByIdsAsync(List<int> ids)
+        {
+            return await _context.Coverages
+           .Where(c => ids.Contains(c.Id))
+           .ToListAsync();
+        }
     }
 }

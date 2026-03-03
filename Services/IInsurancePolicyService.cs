@@ -4,8 +4,10 @@ namespace SegurosLafiseBackend.Services
 {
     public interface IInsurancePolicyService
     {
-        Task<InsurancePolicyDto> CreateAsync(CreateInsurancePolicyDto dto);
         Task<List<InsurancePolicyDto>> GetAllAsync();
+        Task<InsurancePolicyDto> GetByIdAsync(int id);
         Task DeleteAsync(int id);
+
+        Task<InsurancePolicyDto> EmitPolicy(EmitPolicyDto dto);
     }
 }

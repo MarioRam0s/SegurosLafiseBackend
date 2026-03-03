@@ -1,4 +1,5 @@
 ﻿using SegurosLafiseBackend.Dtos;
+using SegurosLafiseBackend.Entities;
 
 namespace SegurosLafiseBackend.Services
 {

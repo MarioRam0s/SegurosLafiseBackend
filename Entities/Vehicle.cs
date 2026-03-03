@@ -13,7 +13,7 @@ public partial class Vehicle
 
     public string Model { get; set; } = null!;
 
-    public DateOnly ManufacturingYear { get; set; }
+    public int ManufacturingYear { get; set; }
 
     public decimal CommercialValue { get; set; }
 

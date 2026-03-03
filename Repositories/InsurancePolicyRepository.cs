@@ -41,5 +41,14 @@ namespace SegurosLafiseBackend.Repositories
             policy.DeleteAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> ExistsActivePolicyByClientAndVehicleAsync(int clientId, int vehicleId)
+        {
+            return await _context.InsurancePolicies
+                .AnyAsync(p =>
+                    p.IdClient == clientId &&
+                    p.IdVehicle == vehicleId &&
+                    p.Active);
+        }
     }
 }

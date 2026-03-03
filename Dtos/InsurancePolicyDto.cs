@@ -34,5 +34,12 @@
         public List<int> CoverageIds { get; set; } = new();
     }
 
+    public class EmitPolicyDto
+    {
+        public int IdClient { get; set; }
+        public int IdVehicle { get; set; }
+        public List<int> CoverageIds { get; set; } = new();
+    }
+
 
 }
