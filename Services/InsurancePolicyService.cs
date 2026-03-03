@@ -35,7 +35,12 @@ namespace SegurosLafiseBackend.Services
                 Id = p.Id,
                 PolicyNumber = p.InsurancePolicy1,
                 CoverageAmount = p.CoverageAmount,
-                TotalPremium = p.TotalPremium
+                TotalPremium = p.TotalPremium,
+                IdClient= p.IdClient,
+                IdVehicle= p.IdVehicle,
+                IssueDate=p.IssueDate,
+                
+                
             }).ToList();
         }
 
@@ -50,11 +55,7 @@ namespace SegurosLafiseBackend.Services
             if (vehicle is null)
                 throw new Exception("Vehicle not found");
 
-            var vehicleAge =  DateTime.UtcNow.Year - vehicle.ManufacturingYear;
-
-            if (vehicleAge > 20)
-                throw new Exception("The vehicle is older than 20 years and cannot be insured.");
-
+  
             return new InsurancePolicyDto
             {
                 Id = policy.Id,
@@ -64,7 +65,6 @@ namespace SegurosLafiseBackend.Services
                 IssueDate = policy.IssueDate,
                 CoverageAmount = policy.CoverageAmount,
                 TotalPremium = policy.TotalPremium,
-                Active = policy.Active
             };
         }
 
@@ -89,6 +89,11 @@ namespace SegurosLafiseBackend.Services
             var vehicle = await _vehicleRepository.GetByIdAsync(dto.IdVehicle);
             if (vehicle == null)
                 throw new Exception("Vehicle not found");
+
+            var vehicleAge = DateTime.UtcNow.Year - vehicle.ManufacturingYear;
+
+            if (vehicleAge > 20)
+                throw new Exception("The vehicle is older than 20 years and cannot be insured.");
 
             //Validar que no exista póliza activa para este cliente y vehículo
             var hasActivePolicy = await _policyRepository.ExistsActivePolicyByClientAndVehicleAsync(client.Id, vehicle.Id);
@@ -128,6 +133,7 @@ namespace SegurosLafiseBackend.Services
                     IdCoverage = coverage.Id,
                     AppliedRate = coverage.Rate,
                     AppliedCoverageAmount = appliedAmount,
+                    Active = true,
                 };
 
                 _context.InsurancePolicyCoverages.Add(policyCoverage);

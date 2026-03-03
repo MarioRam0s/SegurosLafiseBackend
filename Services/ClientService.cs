@@ -89,5 +89,38 @@ namespace SegurosLafiseBackend.Services
                 Email = client.Email
             };
         }
+
+
+        public async Task<ClientDto> UpdateClientAsync(ClientDto dto)
+        {
+            //Obtener cliente existente
+            var client = await _repository.GetByIdAsync(dto.Id);
+            if (client == null)
+                throw new Exception("Client not found");
+
+            //Validaciones de negocio
+            if (string.IsNullOrWhiteSpace(dto.NameClient))
+                throw new Exception("Client name cannot be empty");
+            if (string.IsNullOrWhiteSpace(dto.Email))
+                throw new Exception("Email cannot be empty");
+
+            //Actualizar campos
+            client.NameClient = dto.NameClient;
+            client.Identification = dto.Identification;
+            client.Email = dto.Email;
+            client.UpdateAt = DateTime.UtcNow;
+
+            //Guardar cambios usando el repository
+            await _repository.UpdateAsync(client);
+
+            // Retornar DTO
+            return new ClientDto
+            {
+                Id = client.Id,
+                NameClient = client.NameClient,
+                Identification = client.Identification,
+                Email = client.Email,
+            };
+        }
     }
 }

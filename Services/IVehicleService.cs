@@ -8,5 +8,7 @@ namespace SegurosLafiseBackend.Services
         Task<VehicleDto?> GetByIdAsync(int id);
         Task<VehicleDto> CreateAsync(CreateVehicleDto dto);
         Task<bool> DeleteAsync(int id);
+
+        Task<VehicleDto> UpdateVehicleAsync(int id, VehicleDto dto);
     }
 }

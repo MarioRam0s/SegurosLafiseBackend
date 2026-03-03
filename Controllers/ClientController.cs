@@ -41,6 +41,23 @@ namespace SegurosLafiseBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateClient(int id, [FromBody] ClientDto dto)
+        {
+            if (id != dto.Id)
+                return BadRequest(new { message = "Id mismatch" });
+
+            try
+            {
+                var updatedClient = await _service.UpdateClientAsync(dto);
+                return Ok(updatedClient);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

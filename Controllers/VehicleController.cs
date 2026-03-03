@@ -40,6 +40,20 @@ namespace SegurosLafiseBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateVehicle(int id, [FromBody] VehicleDto dto)
+        {
+            try
+            {
+                var updatedVehicle = await _service.UpdateVehicleAsync(id, dto);
+                return Ok(updatedVehicle);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
